@@ -32,6 +32,7 @@ Robot.prototype.login = function(){
 
 Robot.prototype.scrapeData = function() {
     return nightmare
+        .wait(5000) // for the purpose of demo
         .evaluate(() => {
             const data = {
                 'portfolioBalance' : document.getElementsByClassName('number-value')[0].innerText,
@@ -50,7 +51,6 @@ Robot.prototype.scrapeData = function() {
 }
 
 Robot.prototype.sendEmail = function(data) {
-    console.log("SENDEMAMIL: " + this.email);
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -84,10 +84,13 @@ Robot.prototype.sendEmail = function(data) {
     });
 }
 
-const task = cron.schedule('* * 9 * *', function() {
-  console.log('Starting! Running every day at 9am');
-  const wealthSimpleBot = new Robot();
-  wealthSimpleBot.login();
-});
+const wealthSimpleBot = new Robot();
+wealthSimpleBot.login();
 
-task.start();
+// const task = cron.schedule('* * 9 * *', function() {
+//   console.log('Starting! Running every day at 9am');
+//   const wealthSimpleBot = new Robot();
+//   wealthSimpleBot.login();
+// });
+//
+// task.start();
