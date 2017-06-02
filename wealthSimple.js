@@ -22,6 +22,9 @@ Robot.prototype.login = function(){
         .then(() => {
             return this.scrapeData();
         })
+        .then((data) => {
+            return this.sendEmail(data);
+        })
         .catch((err) => {
             if(err) {
                 return console.log(err);
@@ -33,7 +36,7 @@ Robot.prototype.scrapeData = function() {
     return nightmare
         .wait(5000) // for the purpose of demo
         .evaluate(() => {
-            const data = {
+            const data = {  // gathering necessary data
                 'portfolioBalance' : document.getElementsByClassName('number-value')[0].innerText,
                 'totalEarnings' : document.getElementsByClassName('number-value')[1].innerText,
                 'timeWeighted' : document.getElementsByClassName('number-value')[3].innerText,
@@ -44,9 +47,6 @@ Robot.prototype.scrapeData = function() {
             return data;
         })
         .end()  // exit electron browser
-        .then((data) => {
-            return this.sendEmail(data);
-        });
 }
 
 Robot.prototype.sendEmail = function(data) {
@@ -81,16 +81,7 @@ Robot.prototype.sendEmail = function(data) {
         }
         console.log('Message %s sent: %s', info.messageId, info.response);
     });
-
 }
 
 const wealthSimpleBot = new Robot();
 wealthSimpleBot.login();
-
-// const task = cron.schedule('* * 9 * *', function() {
-//   console.log('Starting! Running every day at 9am');
-//   const wealthSimpleBot = new Robot();
-//   wealthSimpleBot.login();
-// });
-//
-// task.start();
