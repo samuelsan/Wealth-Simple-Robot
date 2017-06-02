@@ -24,8 +24,7 @@ Robot.prototype.login = function(){
         })
         .catch((err) => {
             if(err) {
-                console.log(err);
-                process.exit();
+                return console.log(err);
             }
         });
 }
@@ -82,6 +81,7 @@ Robot.prototype.sendEmail = function(data) {
         }
         console.log('Message %s sent: %s', info.messageId, info.response);
     });
+
 }
 
 const wealthSimpleBot = new Robot();
